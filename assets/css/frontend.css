@@ -1,0 +1,29 @@
+.chosen-container-single .chosen-single abbr,
+.chosen-container-single .chosen-single div b,
+.chosen-container-single .chosen-search input[type="text"],
+.chosen-container-multi .chosen-choices .search-choice .search-choice-close,
+.chosen-container .chosen-results-scroll-down span,
+.chosen-container .chosen-results-scroll-up span {
+  background-image: none !important;
+}
+
+.chosen-container-single .chosen-single div b::after {
+  content: "";
+  display: block;
+  height: 0;
+  margin: 14px 0 0 4px;
+  width: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+}
+
+.chosen-container-multi .chosen-choices .search-choice .search-choice-close::after,
+.chosen-container-single .chosen-single abbr::after {
+  content: "x";
+  color: currentColor;
+  display: block;
+  font-size: 12px;
+  line-height: 10px;
+  text-indent: 0;
+}

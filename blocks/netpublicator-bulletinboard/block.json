@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "lidingo/netpublicator-bulletinboard",
+  "title": "Anslagstavla",
+  "category": "widgets",
+  "icon": "megaphone",
+  "description": "Visar kommunens anslagstavla från Netpublicator.",
+  "textdomain": "lidingo-netpublicator-bulletinboard",
+  "supports": {
+    "align": false,
+    "anchor": false,
+    "customClassName": false,
+    "html": false,
+    "multiple": false
+  },
+  "editorScript": "file:../../assets/js/editor.js"
+}

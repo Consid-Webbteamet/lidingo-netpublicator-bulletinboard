@@ -1,0 +1,28 @@
+{
+  "name": "consid-webbteamet/lidingo-netpublicator-bulletinboard",
+  "description": "Netpublicator bulletin board block for Lidingo.",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "version": "dev-main",
+  "authors": [
+    {
+      "name": "Consid Webbteamet"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "LidingoNetpublicatorBulletinboard\\": "source/php/"
+    }
+  },
+  "require": {
+    "php": "^8.0"
+  },
+  "extra": {
+    "installer-name": "lidingo-netpublicator-bulletinboard"
+  },
+  "config": {
+    "optimize-autoloader": true
+  }
+}
