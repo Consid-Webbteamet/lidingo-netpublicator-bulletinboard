@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Plugin Name:       Lidingo Netpublicator Bulletinboard
- * Description:       Displays the Netpublicator bulletin board as a Gutenberg block.
+ * Description:       Displays the Netpublicator bulletin board as a Modularity module and Gutenberg block.
  * Version:           0.1.0
  * Author:            Consid Webbteamet
  * Text Domain:       lidingo-netpublicator-bulletinboard
@@ -19,7 +19,17 @@ if (!defined('ABSPATH')) {
 
 define('LIDINGO_NETPUBLICATOR_BULLETINBOARD_PATH', plugin_dir_path(__FILE__));
 define('LIDINGO_NETPUBLICATOR_BULLETINBOARD_URL', plugin_dir_url(__FILE__));
+define('LIDINGO_NETPUBLICATOR_BULLETINBOARD_MODULE_PATH', LIDINGO_NETPUBLICATOR_BULLETINBOARD_PATH . 'source/php/Module/');
+define('LIDINGO_NETPUBLICATOR_BULLETINBOARD_MODULE_VIEW_PATH', LIDINGO_NETPUBLICATOR_BULLETINBOARD_PATH . 'source/php/Module/views');
 define('LIDINGO_NETPUBLICATOR_BULLETINBOARD_VERSION', '0.1.0');
+
+add_action('init', static function (): void {
+    load_plugin_textdomain(
+        'lidingo-netpublicator-bulletinboard',
+        false,
+        plugin_basename(dirname(__FILE__)) . '/languages'
+    );
+});
 
 $autoload = LIDINGO_NETPUBLICATOR_BULLETINBOARD_PATH . 'vendor/autoload.php';
 if (file_exists($autoload)) {
@@ -40,6 +50,25 @@ if (file_exists($autoload)) {
         }
     });
 }
+
+add_action('acf/init', static function (): void {
+    if (class_exists('\\AcfExportManager\\AcfExportManager')) {
+        $acfExportManager = new \AcfExportManager\AcfExportManager();
+        $acfExportManager->setTextdomain('lidingo-netpublicator-bulletinboard');
+        $acfExportManager->setExportFolder(LIDINGO_NETPUBLICATOR_BULLETINBOARD_PATH . 'source/php/AcfFields/');
+        $acfExportManager->autoExport([
+            'netpublicator-bulletinboard-settings' => 'group_modularity_netpublicator_bulletinboard_settings',
+        ]);
+        $acfExportManager->import();
+
+        return;
+    }
+
+    $acfFields = LIDINGO_NETPUBLICATOR_BULLETINBOARD_PATH . 'source/php/AcfFields/php/netpublicator-bulletinboard-settings.php';
+    if (file_exists($acfFields)) {
+        require_once $acfFields;
+    }
+});
 
 add_action('plugins_loaded', static function (): void {
     if (!class_exists(App::class)) {

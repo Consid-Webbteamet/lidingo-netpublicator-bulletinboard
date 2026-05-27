@@ -6,11 +6,10 @@ namespace LidingoNetpublicatorBulletinboard;
 
 class BulletinboardBlock
 {
-    private bool $hasRendered = false;
-
     public function addHooks(): void
     {
         add_action('init', [$this, 'register']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueueAssetsForCurrentPage']);
     }
 
     public function register(): void
@@ -27,76 +26,35 @@ class BulletinboardBlock
         );
     }
 
-    /**
-     * Render only one widget per request because the vendor script uses fixed DOM ids.
-     */
     public function render(): string
     {
         $key = SettingsPage::getKey();
-        if ($key === '' || $this->hasRendered) {
+        if ($key === '') {
             return '';
         }
-
-        $this->hasRendered = true;
-        $this->enqueueAssets($key);
 
         return '<div id="bulletinboard"></div>';
     }
 
+    public function enqueueAssetsForCurrentPage(): void
+    {
+        if (!is_singular()) {
+            return;
+        }
+
+        $post = get_post();
+        $key = SettingsPage::getKey();
+
+        if (!$post instanceof \WP_Post || $key === '' || !has_block('lidingo/netpublicator-bulletinboard', $post)) {
+            return;
+        }
+
+        $this->enqueueAssets($key);
+    }
+
     private function enqueueAssets(string $key): void
     {
-        $assetUrl = LIDINGO_NETPUBLICATOR_BULLETINBOARD_URL . 'assets/';
-        $version = LIDINGO_NETPUBLICATOR_BULLETINBOARD_VERSION;
-
-        wp_enqueue_style(
-            'lidingo-netpublicator-bulletinboard-chosen',
-            $assetUrl . 'vendor/bootstrap-chosen.css',
-            [],
-            $version
-        );
-
-        wp_enqueue_style(
-            'lidingo-netpublicator-bulletinboard-netpublicator',
-            $assetUrl . 'vendor/np-publicbulletinboard-v1.1.5.min.css',
-            ['lidingo-netpublicator-bulletinboard-chosen'],
-            $version
-        );
-
-        wp_enqueue_style(
-            'lidingo-netpublicator-bulletinboard-fixes',
-            $assetUrl . 'css/frontend.css',
-            ['lidingo-netpublicator-bulletinboard-chosen'],
-            $version
-        );
-
-        wp_enqueue_script(
-            'lidingo-netpublicator-bulletinboard-chosen',
-            $assetUrl . 'vendor/chosen.jquery.js',
-            ['jquery'],
-            $version,
-            true
-        );
-
-        wp_enqueue_script(
-            'lidingo-netpublicator-bulletinboard-netpublicator',
-            $assetUrl . 'vendor/np-publicbulletinboard-v1.1.5.min.js',
-            ['jquery', 'lidingo-netpublicator-bulletinboard-chosen'],
-            $version,
-            true
-        );
-
-        wp_enqueue_script(
-            'lidingo-netpublicator-bulletinboard-frontend',
-            $assetUrl . 'js/frontend.js',
-            ['jquery', 'lidingo-netpublicator-bulletinboard-netpublicator'],
-            $version,
-            true
-        );
-
-        wp_add_inline_script(
-            'lidingo-netpublicator-bulletinboard-frontend',
-            'window.LidingoNetpublicatorBulletinboard = ' . wp_json_encode(['id' => $key]) . ';',
-            'before'
-        );
+        Assets::enqueueStyles();
+        Assets::enqueueScripts($key);
     }
 }

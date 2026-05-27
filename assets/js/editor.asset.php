@@ -3,6 +3,7 @@
 return [
     'dependencies' => [
         'wp-blocks',
+        'wp-block-editor',
         'wp-element',
         'wp-i18n',
     ],
