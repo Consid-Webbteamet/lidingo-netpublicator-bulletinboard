@@ -33,6 +33,8 @@ class BulletinboardBlock
             return '';
         }
 
+        $this->enqueueAssets($key);
+
         return '<div id="bulletinboard"></div>';
     }
 
