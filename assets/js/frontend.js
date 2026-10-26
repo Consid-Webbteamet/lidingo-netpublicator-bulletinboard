@@ -3,8 +3,6 @@
   const replacements = new Map([
     ['SÃ¶ker', 'Söker'],
     ['Ã„ndra textstorlek', 'Ändra textstorlek'],
-    ['FÃ¶rsta sidan', 'Första sidan'],
-    ['FÃ¶regÃ¥ende sida', 'Föregående sida'],
     ['NÃ¤sta sida', 'Nästa sida'],
     ['Ett okÃ¤nt fel har uppstÃ¥tt. Ladda om sidan eller fÃ¶rsÃ¶k igen om en stund.', 'Ett okänt fel har uppstått. Ladda om sidan eller försök igen om en stund.'],
     ['Â»', '»'],
